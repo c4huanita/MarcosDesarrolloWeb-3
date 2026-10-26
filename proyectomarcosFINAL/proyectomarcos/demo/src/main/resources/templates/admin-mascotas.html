@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Mascotas - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/estilos/sytless.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/logo.ico}">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav th:replace="~{fragments/header :: nav('admin')}"></nav>
+
+    <main class="container my-5 flex-grow-1">
+        <h2 class="mb-4">Panel de Administración - Gestión de Mascotas</h2>
+        <div class="row">
+
+            <div class="col-md-3 mb-4">
+                <div th:replace="~{fragments/sidebar :: menu('mascotas')}"></div>
+            </div>
+
+            <div class="col-md-9">
+                <div th:replace="~{fragments/alertas :: alertas}"></div>
+
+                <div class="d-flex gap-3 mb-4 flex-wrap">
+                    <a th:href="@{/admin/mascotas/nueva}" class="btn btn-primary d-flex align-items-center gap-2">
+                        <i class="bi bi-plus-circle"></i> Registrar nueva mascota
+                    </a>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white fw-bold">Lista de Mascotas Registradas en Base de Datos</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center" style="width: 60px;">ID</th>
+                                        <th class="text-center">Foto</th>
+                                        <th>Nombre</th>
+                                        <th>Raza</th>
+                                        <th>Categoría</th>
+                                        <th>Edad</th>
+                                        <th>Sexo</th>
+                                        <th>Peso</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="m : ${mascotas}">
+                                        <td class="text-center" th:text="${m.id}">1</td>
+                                        <td class="text-center">
+                                            <img th:if="${m.imagen != null and !m.imagen.isEmpty()}" th:src="@{${m.imagen}}"
+                                                alt="Foto" class="rounded border"
+                                                style="width: 45px; height: 45px; object-fit: cover;">
+                                            <i th:if="${m.imagen == null or m.imagen.isEmpty()}"
+                                                class="bi bi-image text-muted fs-4"></i>
+                                        </td>
+                                        <td class="fw-bold" th:text="${m.nombre}">Nombre</td>
+                                        <td th:text="${m.raza}">Raza</td>
+                                        <td>
+                                            <span class="badge bg-secondary" th:if="${m.categoria != null}"
+                                                th:text="${m.categoria.nombre}">Categoría</span>
+                                        </td>
+                                        <td th:text="${m.edad}">Edad</td>
+                                        <td th:text="${m.sexo}">Sexo</td>
+                                        <td>
+                                            <span th:if="${m.peso != null}" th:text="${m.peso} + ' kg'">10 kg</span>
+                                            <span th:if="${m.peso == null}" class="text-muted">-</span>
+                                        </td>
+                                        <td class="text-center text-nowrap">
+                                            <a th:href="@{/admin/mascotas/editar/{id}(id=${m.id})}"
+                                                class="btn btn-sm btn-outline-warning me-1">
+                                                <i class="bi bi-pencil-square"></i> Editar
+                                            </a>
+                                            <a th:href="@{/admin/mascotas/eliminar/{id}(id=${m.id})}"
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('¿Seguro que deseas eliminar esta mascota? También se borrarán sus solicitudes.');">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(mascotas)}">
+                                        <td colspan="9" class="text-center py-4 text-muted">No hay mascotas registradas
+                                            todavía.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ================= MODAL REGISTRAR / EDITAR ================= -->
+    <div class="modal fade" id="modalMascota" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form th:action="@{/admin/mascotas/guardar}" th:object="${mascotaNueva}" method="post"
+                    enctype="multipart/form-data" novalidate>
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            th:text="${mascotaNueva.id == null} ? 'Registrar Nueva Mascota' : 'Editar Mascota'">
+                            Mascota</h5>
+                        <a th:href="@{/admin/mascotas}" class="btn-close" aria-label="Close"></a>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre *</label>
+                                <input type="text" class="form-control" th:field="*{nombre}" placeholder="Ej: Max"
+                                    th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Raza *</label>
+                                <input type="text" class="form-control" th:field="*{raza}" placeholder="Ej: Labrador"
+                                    th:classappend="${#fields.hasErrors('raza')} ? 'is-invalid'" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('raza')}" th:errors="*{raza}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Categoría *</label>
+                                <select class="form-select" th:field="*{categoria.id}"
+                                    th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid'">
+                                    <option value="">Selecciona una categoría...</option>
+                                    <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sexo *</label>
+                                <select class="form-select" th:field="*{sexo}"
+                                    th:classappend="${#fields.hasErrors('sexo')} ? 'is-invalid'">
+                                    <option value="">Selecciona...</option>
+                                    <option value="Macho">Macho</option>
+                                    <option value="Hembra">Hembra</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Edad *</label>
+                                <input type="text" class="form-control" th:field="*{edad}" placeholder="Ej: 1 año"
+                                    th:classappend="${#fields.hasErrors('edad')} ? 'is-invalid'" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Tamaño *</label>
+                                <input type="text" class="form-control" th:field="*{tamano}" placeholder="Ej: Mediano"
+                                    th:classappend="${#fields.hasErrors('tamano')} ? 'is-invalid'" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('tamano')}" th:errors="*{tamano}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Peso (kg) *</label>
+                                <input type="text" inputmode="decimal" class="form-control" th:field="*{peso}"
+                                    placeholder="Ej: 12.5"
+                                    th:classappend="${#fields.hasErrors('peso')} ? 'is-invalid'" />
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Personalidad</label>
+                            <input type="text" class="form-control" th:field="*{personalidad}"
+                                placeholder="Ej: Juguetón"
+                                th:classappend="${#fields.hasErrors('personalidad')} ? 'is-invalid'" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('personalidad')}" th:errors="*{personalidad}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Foto de la Mascota (PNG / JPG)
+                                <span th:if="${mascotaNueva.id != null}" class="text-muted">- opcional, deja vacío para conservar la actual</span>
+                            </label>
+                            <div class="mb-2" th:if="${mascotaNueva.imagen != null and !mascotaNueva.imagen.isEmpty()}">
+                                <img th:src="@{${mascotaNueva.imagen}}" alt="Foto actual" class="rounded border"
+                                    style="width: 70px; height: 70px; object-fit: cover;">
+                            </div>
+                            <input type="file" class="form-control" name="file" accept="image/png, image/jpeg"
+                                th:classappend="${#fields.hasErrors('imagen')} ? 'is-invalid'" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción *</label>
+                            <textarea class="form-control" th:field="*{descripcion}" rows="3"
+                                placeholder="Detalles de la mascota..."
+                                th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid'"></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/admin/mascotas}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Mascota</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Abre el modal al registrar, editar o cuando hay errores de validación -->
+    <script th:if="${abrirModal}">
+        document.addEventListener("DOMContentLoaded", function () {
+            new bootstrap.Modal(document.getElementById('modalMascota')).show();
+        });
+    </script>
+</body>
+
+</html>

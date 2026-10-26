@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascotas - Patitas Felices</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/estilos/sytless.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/logo.ico}">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <nav th:replace="~{fragments/header :: nav('mascotas')}"></nav>
+    
+    <main class="container my-5 flex-grow-1">
+        <h2 class="text-center mb-4">Nuestras Mascotas en Adopción</h2>
+
+        <div class="card shadow-sm border-0 rounded-4 p-3 mb-4 bg-white">
+            <form th:action="@{/mascotas}" method="GET" class="row g-3 align-items-end">
+                <!-- Select 1: Categoría -->
+                <div class="col-md-5">
+                    <label class="form-label fw-bold small mb-1"><i class="bi bi-tags-fill text-primary"></i> 1. Selecciona Categoría</label>
+                    <select name="categoriaId" class="form-select" 
+                            onchange="document.getElementById('selectMascotaPublico').value=''; this.form.submit()">
+                        <option value="">Todas las categorías</option>
+                        <option th:each="c : ${categorias}" 
+                                th:value="${c.id}" 
+                                th:text="${c.nombre}"
+                                th:selected="${c.id == categoriaSeleccionada}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Select 2: Mascota (Se llena en cascada según la categoría elegida) -->
+                <div class="col-md-5">
+                    <label class="form-label fw-bold small mb-1"><i class="bi bi-heart-fill text-danger"></i> 2. Selecciona Mascota</label>
+                    <select id="selectMascotaPublico" name="mascotaId" class="form-select" onchange="this.form.submit()">
+                        <option value="">Todas las mascotas de esta categoría</option>
+                        <option th:each="m : ${mascotasDelSelect}" 
+                                th:value="${m.id}" 
+                                th:text="${m.nombre + ' (' + m.raza + ')'}"
+                                th:selected="${m.id == mascotaSeleccionada}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Botón Limpiar Filtro -->
+                <div class="col-md-2 d-grid">
+                    <a th:href="@{/mascotas}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Listado de Tarjetas -->
+        <div class="row g-4">
+            <div class="col-12 col-md-6 col-lg-4" th:each="m : ${mascotas}">
+                <div class="card mascota-card h-100">
+                    <div class="card-img-container">
+                        <img th:src="@{${m.imagen}}" class="img-fluid w-100" th:alt="${m.nombre}" style="height: 250px; object-fit: cover;">
+                        <span class="badge custom-badge" th:text="${m.personalidad}">Personalidad</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 th:text="${m.nombre}">Nombre</h3>
+                        <span class="mascota-edad">
+                            <span th:text="${m.edad}">Edad</span><br>
+                            <small th:text="${m.sexo}">Sexo</small>
+                        </span>
+                        <p class="mascota-raza" th:text="${m.raza}">Raza</p>
+                        <p class="mascota-desc" th:text="${m.descripcion}">Descripción</p>
+                        <div class="card-actions">
+                            <span class="badge size-badge" th:text="${m.tamano}">Tamaño</span>
+                            
+                            <button class="btn custom-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalAdopcion" 
+                                th:data-id="${m.id}"
+                                onclick="document.getElementById('mascotaIdInput').value = this.getAttribute('data-id');">
+                                Adoptar &rarr;
+                            </button>
+
+                            <button class="btn btn-outline-dark rounded-pill btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalDetalles" th:data-nombre="${m.nombre}" th:data-raza="${m.raza}"
+                                th:data-edad="${m.edad}" th:data-sexo="${m.sexo}" th:data-tamano="${m.tamano}"
+                                th:data-personalidad="${m.personalidad}" th:data-descripcion="${m.descripcion}"
+                                th:data-imagen="@{${m.imagen}}">
+                                Ver detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-center py-5" th:if="${#lists.isEmpty(mascotas)}">
+                <p class="text-muted fs-5">No se encontraron mascotas con los filtros seleccionados.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Detalles -->
+    <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalleNombre">Detalles de la mascota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="detalleImagen" class="img-fluid rounded mb-3 w-100" alt="Mascota">
+                    <h3 id="detalleNombreGrande" class="mb-3"></h3>
+                    <p><strong>Raza:</strong> <span id="detalleRaza"></span></p>
+                    <p><strong>Edad:</strong> <span id="detalleEdad"></span></p>
+                    <p><strong>Sexo:</strong> <span id="detalleSexo"></span></p>
+                    <p><strong>Tamaño:</strong> <span id="detalleTamano"></span></p>
+                    <p><strong>Personalidad:</strong> <span id="detallePersonalidad"></span></p>
+                    <hr>
+                    <h5>Sobre la mascota</h5>
+                    <p id="detalleDescripcion"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn custom-btn" data-bs-toggle="modal"
+                        data-bs-target="#modalAdopcion">Adoptar →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adopción -->
+    <div class="modal fade" id="modalAdopcion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitud de Adopción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/adoptar/guardar}" method="POST" th:object="${solicitudAdopcion}">
+                        <input type="hidden" id="mascotaIdInput" name="mascotaId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Completo *</label>
+                            <input type="text" class="form-control" th:field="*{nombreCompleto}" required placeholder="Ingresa tu nombre">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono / Celular *</label>
+                            <input type="tel" class="form-control" th:field="*{telefono}" required maxlength="9" placeholder="Ej. 999888777">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">¿Por qué deseas adoptar? *</label>
+                            <textarea class="form-control" th:field="*{motivo}" rows="3" required
+                                placeholder="Cuéntanos un poco sobre tu hogar..."></textarea>
+                        </div>
+                        <button type="submit" class="btn custom-btn w-100">Enviar Solicitud</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/Js/script.js}"></script>
+</body>
+</html>

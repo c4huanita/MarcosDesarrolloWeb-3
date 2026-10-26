@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm" th:fragment="nav(paginaActual)">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/logo.ico}" alt="Logo Patitas Felices" width="45" height="45"
+                    class="me-2 rounded-circle">
+                <span class="fw-bold text-primary">Patitas Felices</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" th:href="@{/mascotas}"
+                            th:classappend="${paginaActual == 'mascotas'} ? 'active text-primary' : ''">Mascotas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" th:href="@{/adoptar}"
+                            th:classappend="${paginaActual == 'adoptar'} ? 'active text-primary' : ''">Cómo adoptar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold" th:href="@{/contacto}"
+                            th:classappend="${paginaActual == 'contacto'} ? 'active text-primary' : ''">Contacto</a>
+                    </li>
+
+
+                    <!-- VISTA SI NO HAY USUARIO LOGUEADO -->
+                    <li class="nav-item ms-lg-3" th:if="${session.usuario == null}">
+                        <a class="btn btn-outline-primary rounded-pill px-4" th:href="@{/login}"
+                            th:classappend="${paginaActual == 'login'} ? 'active' : ''">
+                            Iniciar Sesión
+                        </a>
+                    </li>
+
+                    <!-- Cuando el usuario YA inició sesión -->
+                    <div class="dropdown" th:if="${session.usuario != null}">
+                        <a class="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center gap-2" href="#"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span th:text="${session.usuario}">correo@ejemplo.com</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+                            <!-- 🔽 SOLO SE MUESTRA SI EL ROL ES ADMINISTRADOR 🔽 -->
+                            <li th:if="${session.rol == 'Administrador'}">
+                                <a class="dropdown-item" th:href="@{/admin}">
+                                    <i class="bi bi-speedometer2 me-2"></i> Panel de Administración
+                                </a>
+                            </li>
+                            <li th:if="${session.rol == 'Administrador'}">
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <!-- Esto lo ven tanto Administradores como Adoptantes -->
+                            <li>
+                                <a class="dropdown-item text-danger" th:href="@{/logout}">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>

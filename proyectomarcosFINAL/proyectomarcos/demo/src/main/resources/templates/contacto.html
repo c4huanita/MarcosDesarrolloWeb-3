@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patitas Felices - Contacto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/estilos/sytless.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/logo.ico}">
+</head>
+
+<body>
+<nav th:replace="~{fragments/header :: nav('contacto')}"></nav>
+    <main class="container my-5 flex-grow-1">
+        <section class="contacto-section">
+            <div class="text-center mb-5">
+                <span>CONTÁCTANOS</span>
+                <h1>Estamos para ayudarte</h1>
+                <p>Si tienes alguna pregunta sobre nuestras mascotas o sobre el proceso de adopción, escríbenos.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="contacto-info">
+                        <h3>Información de contacto</h3>
+                        <p class="mt-3">Puedes comunicarte con nosotros para resolver cualquier duda sobre la adopción.
+                        </p>
+                        <div class="mb-4">
+                            <h5><i class="bi bi-telephone"></i> Teléfono</h5>
+                            <p>999 888 777</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5><i class="bi bi-envelope"></i> Correo</h5>
+                            <p>patitasfelices@gmail.com</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5><i class="bi bi-clock"></i> Horario</h5>
+                            <p>Lunes a Sábado<br>9:00 am - 6:00 pm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card form-card">
+                        <div class="card-body p-4">
+                            <h3 class="mb-4">Envíanos un mensaje</h3>
+                            <form id="formContacto" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre completo</label>
+                                    <input type="text" class="form-control" placeholder="Ingresa tu nombre" required minlength="3" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+">
+                                    <div class="invalid-feedback">Por favor, ingresa tu nombre completo (solo letras).</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" placeholder="ejemplo@correo.com" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
+                                    <div class="invalid-feedback">Ingresa un correo electrónico válido (ejemplo: usuario@correo.com).</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Mensaje</label>
+                                    <textarea class="form-control" rows="4" placeholder="Escribe tu consulta..." required minlength="10"></textarea>
+                                    <div class="invalid-feedback">Por favor, escribe un mensaje de al menos 10 caracteres para poder ayudarte mejor.</div>
+                                </div>
+                                
+                                <button type="submit" class="btn custom-btn">Enviar mensaje</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="ubicacion">
+            <h2>Acercate aquí</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d975.3952683194931!2d-77.04000704122518!3d-12.072318943416503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sveterniaria!5e0!3m2!1sen!2spe!4v1790553507505!5m2!1sen!2spe"
+                width="100%"
+                height="450"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="modal-body">
+                    <div class="display-1 text-success mb-3">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">¡Mensaje Enviado con Éxito!</h3>
+                    <p class="text-muted mb-4">Hemos recibido tu mensaje correctamente. Te responderemos en menos de 24
+                        horas.</p>
+                    <button type="button" class="btn custom-btn px-4" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/Js/script.js}"></script>
+</body>
+</html>

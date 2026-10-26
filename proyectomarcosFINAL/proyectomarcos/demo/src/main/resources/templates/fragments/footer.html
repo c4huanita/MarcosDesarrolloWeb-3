@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+        <footer class="footer-section mt-auto" th:fragment="footer">
+        <div class="container footer-content">
+            <div class="footer-logo">
+            <img th:src="@{/logo.ico}" alt="Logo Patitas Felices" width="45" height="45"
+                    class="me-2 rounded-circle">
+                <span>Patitas Felices</span>
+            </div>
+            <p>Hecho con amor para los animales — Refugio desde 2013</p>
+            <div class="footer-links">
+                <a th:href="@{/mascotas}">Mascotas</a>
+                <a th:href="@{/adoptar}">Proceso</a>
+                <a th:href="@{/contacto}">Contacto</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

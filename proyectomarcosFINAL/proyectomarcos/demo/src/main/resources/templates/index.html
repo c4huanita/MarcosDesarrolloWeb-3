@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patitas Felices - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/estilos/sytless.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/logo.ico}" class="me-2 rounded-circle">
+    
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<nav th:replace="~{fragments/header :: nav('index')}"></nav>
+    <header class="hero-section position-relative overflow-hidden">
+        <img th:src="@{/Img/perro.jpg}" alt="Fondo Patitas Felices" class="hero-bg-img">
+        <div class="hero-overlay d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 col-md-9">
+                        <div class="hero-badge">+240 mascotas esperan un hogar</div>
+                        <h1>Cambia una vida, <span>incluida la tuya.</span></h1>
+                        <p>Encuentra al compañero perfecto en nuestro refugio. Cada mascota que ves aquí merece amor, un
+                            hogar y una segunda oportunidad.</p>
+                        <div class="hero-buttons">
+                            <a th:href="@{/mascotas}" class="btn custom-btn">Ver mascotas</a>
+                            <a th:href="@{/adoptar}" class="btn custom-btn-outline">Cómo funciona</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="container mascotas-section my-5">
+        <div class="section-title text-center mb-4">
+            <span>NUESTROS AMIGOS</span>
+            <h2>Busca tu compañero ideal</h2>
+        </div>
+
+        <div class="filter-buttons mb-4 text-center">
+            <button class="btn btn-dark active">Todos</button>
+            <button class="btn btn-outline-dark">Perros</button>
+            <button class="btn btn-outline-dark">Gatos</button>
+            <button class="btn btn-outline-dark">Bebés</button>
+            <button class="btn btn-outline-dark">Adultos</button>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card mascota-card">
+                    <div class="card-img-container">
+                        <img th:src="@{/Img/perrito1.jpg}" class="img-fluid w-100" alt="Mango">
+                        <span class="badge custom-badge">Juguetón</span>
+                    </div>
+                    <div class="card-body">
+                        <h3>Mango</h3>
+                        <span class="mascota-edad">8 meses<br><small>Macho</small></span>
+                        <p class="mascota-raza">Golden Retriever</p>
+                        <p class="mascota-desc">Mango adora correr en el parque y es muy cariñoso con los niños. Está
+                            vacunado y desparasitado.</p>
+                        <div class="card-actions">
+                            <span class="badge size-badge">Grande</span>
+                            <button class="btn custom-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalAdopcion">Adoptar &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mascota-card">
+                    <div class="card-img-container">
+                        <img th:src="@{/Img/gato1.jpg}" class="img-fluid w-100" alt="Luna">
+                        <span class="badge custom-badge">Tranquila</span>
+                    </div>
+                    <div class="card-body">
+                        <h3>Luna</h3>
+                        <span class="mascota-edad">2 años<br><small>Hembra</small></span>
+                        <p class="mascota-raza">Gata</p>
+                        <p class="mascota-desc">Luna es elegante y reservada. Le encanta tomar el sol y ronronear junto
+                            a su familia.</p>
+                        <div class="card-actions">
+                            <span class="badge size-badge">Mediana</span>
+                            <button class="btn custom-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalAdopcion">Adoptar &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mascota-card">
+                    <div class="card-img-container">
+                        <img th:src="@{/Img/perro3.jpg}" class="img-fluid w-100" alt="Biscuit">
+                        <span class="badge custom-badge">Curioso</span>
+                    </div>
+                    <div class="card-body">
+                        <h3>Biscuit</h3>
+                        <span class="mascota-edad">1 año<br><small>Macho</small></span>
+                        <p class="mascota-raza">Beagle</p>
+                        <p class="mascota-desc">Biscuit es aventurero y lleno de energía. Aprende trucos rápido y ama
+                            explorar al aire libre.</p>
+                        <div class="card-actions">
+                            <span class="badge size-badge">Mediano</span>
+                            <button class="btn custom-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalAdopcion">Adoptar &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="banner-adopcion">
+        <div class="container banner-content">
+            <h2>No compres, <span>adopta.</span></h2>
+            <p>Hay miles de animales en refugios esperando encontrar un hogar lleno de amor. Tú puedes ser la
+                diferencia.</p>
+            <a class="btn custom-btn" th:href="@{/mascotas}">Quiero adoptar</a>
+        </div>
+    </section>
+
+    <section id="contacto" class="container contacto-section my-5">
+        <div class="row">
+            <div class="col-lg-6 contacto-info mb-4 mb-lg-0">
+                <span>ESCRÍBENOS</span>
+                <h2>Da el primer paso hoy</h2>
+                <p>Cuéntanos qué mascota te interesó o haznos cualquier pregunta. Te respondemos en menos de 24 horas.
+                </p>
+                <ul class="lista-contacto">
+                    <li>
+                        <div class="icono-contacto me-3">
+                            <i class="bi bi-geo-alt-fill fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <strong>Calle Esperanza 42, Ciudad Lima Norte</strong><br>
+                            <small>Visítanos de Lun–Sáb 9am–6pm</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icono-contacto me-3">
+                            <i class="bi bi-telephone-fill fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <strong>+51 999 888 777</strong><br>
+                            <small>Llámanos o manda WhatsApp</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icono-contacto me-3">
+                            <i class="bi bi-envelope-fill fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <strong>patitasfelices@gmail.com</strong><br>
+                            <small>Respuesta en menos de 24h</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card form-card">
+                    <div class="card-body">
+                        <form id="formContacto" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label">Tu nombre</label>      
+                                <input type="text" class="form-control" placeholder="María García" required minlength="3" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+">
+                                <div class="invalid-feedback">Por favor, ingresa un nombre válido (solo letras).</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" placeholder="maria@correo.com" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
+                                <div class="invalid-feedback">Ingresa un correo electrónico válido (ejemplo: usuario@correo.com).</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">¿Cuál mascota te interesó?</label>
+                                <textarea class="form-control" rows="3" placeholder="Me interesó Mango porque..." required minlength="10"></textarea>
+                                <div class="invalid-feedback">Por favor cuéntanos un poco más (mínimo 10 caracteres).</div>
+                            </div>
+                            <button type="submit" class="btn custom-btn">Enviar mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Modal Adopción -->
+    <div class="modal fade" id="modalAdopcion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitud de Adopción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdopcionModal" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" required placeholder="Ingresa tu nombre" minlength="3" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+">
+                            <div class="invalid-feedback">Por favor ingresa tu nombre completo (solo letras).</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono / Celular</label>
+                            <input type="tel" class="form-control" required placeholder="Ej. 999888777" pattern="[0-9]{9}">
+                            <div class="invalid-feedback">Ingresa un número de celular válido de 9 dígitos.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">¿Por qué deseas adoptar?</label>
+                            <textarea class="form-control" rows="3" required placeholder="Cuéntanos un poco sobre tu hogar..." minlength="15"></textarea>
+                            <div class="invalid-feedback">Por favor bríndanos un poco más de detalles (mínimo 15 caracteres).</div>
+                        </div>
+                        <button type="submit" class="btn custom-btn">Enviar Solicitud</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Éxito -->
+    <div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="modal-body">
+                    <div class="display-1 text-success mb-3">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">¡Mensaje Enviado con Éxito!</h3>
+                    <p class="text-muted mb-4">Hemos recibido tu mensaje correctamente. Te responderemos en menos de 24
+                        horas.</p>
+                    <button type="button" class="btn custom-btn px-4" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/Js/script.js}"></script>
+</body>
+
+</html>
+

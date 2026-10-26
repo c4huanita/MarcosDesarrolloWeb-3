@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Menú lateral del panel de administración. Uso: ~{fragments/sidebar :: menu('mascotas')} -->
+    <div class="list-group" th:fragment="menu(activo)">
+        <a th:href="@{/admin}" class="list-group-item list-group-item-action"
+            th:classappend="${activo == 'dashboard'} ? 'active'">Dashboard</a>
+        <a th:href="@{/admin/mascotas}" class="list-group-item list-group-item-action"
+            th:classappend="${activo == 'mascotas'} ? 'active'">Mascotas</a>
+        <a th:href="@{/admin/categorias}" class="list-group-item list-group-item-action"
+            th:classappend="${activo == 'categorias'} ? 'active'">Categorías</a>
+        <a th:href="@{/admin/solicitudes}" class="list-group-item list-group-item-action"
+            th:classappend="${activo == 'solicitudes'} ? 'active'">Solicitudes</a>
+        <a th:href="@{/admin/usuarios}" class="list-group-item list-group-item-action"
+            th:classappend="${activo == 'usuarios'} ? 'active'">Usuarios</a>
+    </div>
+</body>
+</html>
